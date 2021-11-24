@@ -9,10 +9,7 @@ import me.aditya.weather.api.WeatherResponse;
 import me.aditya.weather.service.UserService;
 import me.aditya.weather.service.WeatherService;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -27,11 +24,12 @@ public class WeatherResource {
     private final UserService userService;
     private final WeatherService weatherService;
 
-    @POST()
+    @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/weather-data")
-    public Response weatherForecast(WeatherRequest weatherRequest) throws URISyntaxException, IOException {
+    @Path("/weather-data/{location}")
+    public Response weatherForecast(@PathParam("location") String location) throws URISyntaxException, IOException {
+        WeatherRequest weatherRequest = new WeatherRequest(location);
         log.info("Calling Weather service with request : {}", weatherRequest);
         WeatherResponse weatherResponse = weatherService.getWeatherData(weatherRequest.getLocation(),"1");
         log.info("Response from weather service : {}", weatherService);

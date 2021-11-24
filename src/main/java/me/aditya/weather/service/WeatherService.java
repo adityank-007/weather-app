@@ -25,6 +25,7 @@ public class WeatherService {
     private static final String API_SOURCE = "http://api.weatherapi.com/v1/forecast.json";
     public WeatherResponse getWeatherData(String location, String forecastDays) throws URISyntaxException, IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
+        WeatherResponse weatherResponse = null;
         String temperature = null;
         try {
             //?key=4ea89488542041b1ac9172920212211&q=London&days=1&aqi=no&alerts=no
@@ -62,6 +63,8 @@ public class WeatherService {
             JSONObject jsonObject = new JSONObject(json);
             log.info("Response from server : {}",jsonObject.toString());
             double currentTemperature  = jsonObject.getJSONObject("current").getDouble("temp_f");
+            double feelsLike = jsonObject.getJSONObject("current").getDouble("feelslike_f");
+
             temperature = String.valueOf(currentTemperature);
 
         } catch (ClientProtocolException e) {
