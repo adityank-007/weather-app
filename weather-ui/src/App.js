@@ -16,7 +16,7 @@ function App() {
       </form>
       
     {  displayData && <h2> The Current Temperature is {displayData} F</h2>}
-    </div>
+    </div> 
     
   );
 }
