@@ -3,15 +3,15 @@ import {useState} from 'react';
 
 function App() {
   const [ displayData, setDisplayData ] = useState('');
-  const [ location, setLocation ]   = useState('');
+  const [ city, setCity ]   = useState('');
   return (
     <div className="App">
       <h1> Weather App</h1>
       <h2> Please Enter the Location</h2>
-      <form onSubmit={(event) => handleSubmit(event, setDisplayData, location)}> 
+      <form onSubmit={(event) => handleSubmit(event, setDisplayData, city)}> 
         <input type="text" 
         placeholder="Enter your The Location Here"
-        onChange= { (event) => handleChange(event,setLocation,) }  />
+        onChange= { (event) => handleChange(event, setCity) }  />
         <button>Submit</button>
       </form>
       
@@ -22,10 +22,10 @@ function App() {
 }
 function handleChange(event, setDisplayData) {setDisplayData(event.target.value);}
 
-function handleSubmit(event, setDisplayData, location) {
+function handleSubmit(event, setDisplayData, city) {
   event.preventDefault();
-  if (location && location.length > 0) {
-    getWeather(location,setDisplayData);
+  if (city && city.length > 0) {
+    getWeather(city, setDisplayData);
   }
 }
 function handleErrors(response) {
@@ -34,9 +34,9 @@ function handleErrors(response) {
   }
   return response;
 }
-function getWeather(location, setDisplayData) {
-
-  fetch('http://localhost:8080/v1/weather-data/' + location)
+function getWeather(city, setDisplayData) {
+  var hostname = document.location.hostname;
+  fetch('http://' + hostname + ':8080/v1/weather-data/' + city)
   .then(handleErrors)
   .then(response => { console.log(response); return response.json() })
   .then(data => { 
