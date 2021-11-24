@@ -1,0 +1,42 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - "27017:27017" #port mapping
+    networks:
+      - dropw-mongodb-ntw
+
+  dropwizard-backend:
+    image: dropwizard-backend:latest
+    container_name: dropwizard-backend
+    command: ["java", "-jar", "weather-app-1.0-SNAPSHOT.jar", "server", "weather-app.yml"]
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - dropw-mongodb-ntw
+    depends_on:
+      - mongodb
+
+  react-ui:
+    image: weather-ui:latest
+    container_name: react-ui
+    command: [ "npm" , "start" ]
+    ports:
+      - "4000:3000"
+    networks:
+      - dropw-mongodb-ntw
+    depends_on:
+      - dropwizard-backend
+
+
+networks:
+  dropw-mongodb-ntw:
+    name: dropw-mongodb-ntw
+
